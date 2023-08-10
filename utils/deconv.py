@@ -169,7 +169,7 @@ def oasisAR1(y, g=None, lam=0, smin=0, active_set=None):
     for ii in range(len_active_set):
         t0 = int(active_set[ii, 2]) - 1
         tau = int(active_set[ii, 3])
-        print((t0,tau))
+        #print((t0,tau))
         c[t0:(t0 + tau)] = np.maximum(0, active_set[ii, 0] / active_set[ii, 1]) * (g ** np.arange(0, tau)).reshape(-1,1)
     
     s[active_set[1:, 2].astype(int) - 1] = c[active_set[1:, 2].astype(int) - 1] - g * c[active_set[1:, 2].astype(int) - 2]
