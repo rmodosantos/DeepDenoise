@@ -97,7 +97,9 @@ def oasisAR1(y, g=None, lam=0, smin=0, active_set=None):
             np.arange(-1, T-1),
             np.arange(1, T+1)
         ])
-        active_set[-1, :] = [y[-1] - lam, 1, T, 1, T - 1, np.nan]
+        
+        print([y[-1,0] - lam, 1, T, 1, T - 1, np.nan])
+        active_set[-1, :] = [y[-1,0] - lam, 1, T, 1, T - 1, np.nan]
         active_set[0, 4] = np.nan
     else:
         len_active_set = active_set.shape[0]
@@ -117,7 +119,12 @@ def oasisAR1(y, g=None, lam=0, smin=0, active_set=None):
         ):
             active_set[ii_next, 4] = ii
             ii = int(ii_next)
-            ii_next = int(active_set[ii, 5])
+            #ii_next = int(active_set[ii, 5])
+            if not np.isnan(active_set[ii, 5]):
+                ii_next = int(active_set[ii, 5])
+            else:
+                ii_next = active_set[ii, 5]
+
             #print((2,ii_next))
             
         if np.isnan(ii_next):
@@ -155,8 +162,15 @@ def oasisAR1(y, g=None, lam=0, smin=0, active_set=None):
             active_set[ii, 5] = active_set[ii_next, 5]
             idx[ii_next] = False
             
-            ii_prev = int(active_set[ii, 4])
-            ii_next = int(active_set[ii, 5])
+            if not np.isnan(active_set[ii, 4]):
+                ii_prev = int(active_set[ii, 4])
+            else:
+                ii_prev = active_set[ii, 4]
+
+            if not np.isnan(active_set[ii, 5]):    
+                ii_next = int(active_set[ii, 5])
+            else:
+                ii_next = active_set[ii, 5]
     
     active_set = active_set[idx, :]
     len_active_set = active_set.shape[0]
@@ -167,9 +181,11 @@ def oasisAR1(y, g=None, lam=0, smin=0, active_set=None):
     s = np.zeros_like(y)
     
     for ii in range(len_active_set):
-        t0 = int(active_set[ii, 2]) - 1
+        t0 = int(active_set[ii, 2])
         tau = int(active_set[ii, 3])
         #print((t0,tau))
+        #print(np.maximum(0, active_set[ii, 0] / active_set[ii, 1]) * (g ** np.arange(0, tau)))
+        #print(np.maximum(0, active_set[ii, 0] / active_set[ii, 1]) * (g ** np.arange(0, tau)).reshape(-1,1))
         c[t0:(t0 + tau)] = np.maximum(0, active_set[ii, 0] / active_set[ii, 1]) * (g ** np.arange(0, tau)).reshape(-1,1)
     
     s[active_set[1:, 2].astype(int) - 1] = c[active_set[1:, 2].astype(int) - 1] - g * c[active_set[1:, 2].astype(int) - 2]
