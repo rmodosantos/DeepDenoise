@@ -48,10 +48,12 @@ def ButFilter(x, n, wn, flag):
 
 def get_elements_in_periods(periods, A):
     result = []
+    inds = []
     for start, end in periods:
         mask = np.logical_and(A >= start, A <= end)
         result.extend(A[mask])
-    return np.array(result)
+        inds.extend(mask)
+    return np.array(result),np.array(inds)
 
 def denoise(data, model_path, denoised_path, network_depth=20, dev='cpu',save_file=True):
     """Denoise a fluorescence signal using the specified denoising network"""
