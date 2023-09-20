@@ -5,7 +5,64 @@ from scipy.optimize import curve_fit
 from scipy.signal import butter, filtfilt
 import scipy.io as sio
 
-# This file contains a set of functions used in the CNN test analysis
+# This file contains the CNN class and a set of functions used in the CNN test analysis
+
+# Create CNN class
+class DnCNN(nn.Module):
+    def __init__(self, depth=17, n_filters=64, kernel_size=3, n_channels=1,padding=1):
+            """Pytorch implementation of DnCNN. Implementation followed the original paper [1]_. Authors original code can be
+            found on `their Github Page
+            <https://github.com/cszn/DnCNN/>`_.
+
+            Notes
+            -----
+            This implementation is based on the following `Github page
+            <https://github.com/SaoYan/DnCNN-PyTorch>`_.
+
+            Parameters
+            ----------
+            depth : int
+                Number of fully convolutional layers in dncnn. In the original paper, the authors have used depth=17 for non-
+                blind denoising and depth=20 for blind denoising.
+            n_filters : int
+                Number of filters on each convolutional layer.
+            kernel_size : int tuple
+                2D Tuple specifying the size of the kernel window used to compute activations.
+            n_channels : int
+                Number of image channels that the network processes (1 for grayscale, 3 for RGB)
+
+            References
+            ----------
+            .. [1] Zhang K, Zuo W, Chen Y, Meng D, Zhang L. Beyond a gaussian denoiser: Residual learning of deep cnn
+                for image denoising. IEEE Transactions on Image Processing. 2017
+
+            Example
+            -------
+            >>> from OpenDenoising.model.architectures.pytorch import DnCNN
+            >>> dncnn_s = DnCNN(depth=17)
+            >>> dncnn_b = DnCNN(depth=20)
+
+            """
+            super(DnCNN, self).__init__()
+            layers = [
+                nn.Conv2d(in_channels=n_channels, out_channels=n_filters, kernel_size=kernel_size,
+                        padding=padding, bias=False),
+                nn.ReLU(inplace=True)
+            ]
+            for _ in range(depth-2):
+                layers.append(nn.Conv2d(in_channels=n_filters, out_channels=n_filters, kernel_size=kernel_size,
+                                        padding=padding, bias=False))
+                layers.append(nn.BatchNorm2d(n_filters))
+                layers.append(nn.ReLU(inplace=True))
+            layers.append(nn.Conv2d(in_channels=n_filters, out_channels=n_channels, kernel_size=kernel_size,
+                                    padding=padding, bias=False))
+            self.dncnn = nn.Sequential(*layers)
+
+
+    def forward(self, x):
+        out = self.dncnn(x)
+        return out
+
 
 def fit_ACh_spectra(yspec, AChefnorm, Hb, HbO2):
     
@@ -114,61 +171,61 @@ def denoise(data, model_path, denoised_path, network_depth=20, dev='cpu',save_fi
     dev=torch.device(dev)
     test_data = torch.tensor(data, dtype=float, device=dev)
 
-    # Create CNN class
-    class DnCNN(nn.Module):
-        def __init__(self, depth=17, n_filters=64, kernel_size=3, n_channels=1,padding=1):
-                """Pytorch implementation of DnCNN. Implementation followed the original paper [1]_. Authors original code can be
-                found on `their Github Page
-                <https://github.com/cszn/DnCNN/>`_.
+    # # Create CNN class
+    # class DnCNN(nn.Module):
+    #     def __init__(self, depth=17, n_filters=64, kernel_size=3, n_channels=1,padding=1):
+    #             """Pytorch implementation of DnCNN. Implementation followed the original paper [1]_. Authors original code can be
+    #             found on `their Github Page
+    #             <https://github.com/cszn/DnCNN/>`_.
 
-                Notes
-                -----
-                This implementation is based on the following `Github page
-                <https://github.com/SaoYan/DnCNN-PyTorch>`_.
+    #             Notes
+    #             -----
+    #             This implementation is based on the following `Github page
+    #             <https://github.com/SaoYan/DnCNN-PyTorch>`_.
 
-                Parameters
-                ----------
-                depth : int
-                    Number of fully convolutional layers in dncnn. In the original paper, the authors have used depth=17 for non-
-                    blind denoising and depth=20 for blind denoising.
-                n_filters : int
-                    Number of filters on each convolutional layer.
-                kernel_size : int tuple
-                    2D Tuple specifying the size of the kernel window used to compute activations.
-                n_channels : int
-                    Number of image channels that the network processes (1 for grayscale, 3 for RGB)
+    #             Parameters
+    #             ----------
+    #             depth : int
+    #                 Number of fully convolutional layers in dncnn. In the original paper, the authors have used depth=17 for non-
+    #                 blind denoising and depth=20 for blind denoising.
+    #             n_filters : int
+    #                 Number of filters on each convolutional layer.
+    #             kernel_size : int tuple
+    #                 2D Tuple specifying the size of the kernel window used to compute activations.
+    #             n_channels : int
+    #                 Number of image channels that the network processes (1 for grayscale, 3 for RGB)
 
-                References
-                ----------
-                .. [1] Zhang K, Zuo W, Chen Y, Meng D, Zhang L. Beyond a gaussian denoiser: Residual learning of deep cnn
-                    for image denoising. IEEE Transactions on Image Processing. 2017
+    #             References
+    #             ----------
+    #             .. [1] Zhang K, Zuo W, Chen Y, Meng D, Zhang L. Beyond a gaussian denoiser: Residual learning of deep cnn
+    #                 for image denoising. IEEE Transactions on Image Processing. 2017
 
-                Example
-                -------
-                >>> from OpenDenoising.model.architectures.pytorch import DnCNN
-                >>> dncnn_s = DnCNN(depth=17)
-                >>> dncnn_b = DnCNN(depth=20)
+    #             Example
+    #             -------
+    #             >>> from OpenDenoising.model.architectures.pytorch import DnCNN
+    #             >>> dncnn_s = DnCNN(depth=17)
+    #             >>> dncnn_b = DnCNN(depth=20)
 
-                """
-                super(DnCNN, self).__init__()
-                layers = [
-                    nn.Conv2d(in_channels=n_channels, out_channels=n_filters, kernel_size=kernel_size,
-                            padding=padding, bias=False),
-                    nn.ReLU(inplace=True)
-                ]
-                for _ in range(depth-2):
-                    layers.append(nn.Conv2d(in_channels=n_filters, out_channels=n_filters, kernel_size=kernel_size,
-                                            padding=padding, bias=False))
-                    layers.append(nn.BatchNorm2d(n_filters))
-                    layers.append(nn.ReLU(inplace=True))
-                layers.append(nn.Conv2d(in_channels=n_filters, out_channels=n_channels, kernel_size=kernel_size,
-                                        padding=padding, bias=False))
-                self.dncnn = nn.Sequential(*layers)
+    #             """
+    #             super(DnCNN, self).__init__()
+    #             layers = [
+    #                 nn.Conv2d(in_channels=n_channels, out_channels=n_filters, kernel_size=kernel_size,
+    #                         padding=padding, bias=False),
+    #                 nn.ReLU(inplace=True)
+    #             ]
+    #             for _ in range(depth-2):
+    #                 layers.append(nn.Conv2d(in_channels=n_filters, out_channels=n_filters, kernel_size=kernel_size,
+    #                                         padding=padding, bias=False))
+    #                 layers.append(nn.BatchNorm2d(n_filters))
+    #                 layers.append(nn.ReLU(inplace=True))
+    #             layers.append(nn.Conv2d(in_channels=n_filters, out_channels=n_channels, kernel_size=kernel_size,
+    #                                     padding=padding, bias=False))
+    #             self.dncnn = nn.Sequential(*layers)
 
 
-        def forward(self, x):
-            out = self.dncnn(x)
-            return out
+    #     def forward(self, x):
+    #         out = self.dncnn(x)
+    #         return out
 
     def reformat_data(data,window,SampRate=5):
         """
