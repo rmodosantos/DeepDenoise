@@ -16,7 +16,7 @@ For a detailed assessment of model performance please check the notebook [Test_m
 
 ![Validation instance](Validation_instance.png)
 
-Remarkably, the qualitative differences between the CNN networks and gaussian smoothing still hold in a noisier test set, as assessed by the coherence of extracted neuromodulator dynamics with ground truth (figure below).
+Remarkably, the qualitative differences between the CNN networks and gaussian smoothing still hold in a noisier test set, as assessed by the coherence between extracted neuromodulator dynamics and ground truth (figure below, "Denoised 1" and "Denoised 2" vs. "Smooth 1").
 
 ![Coherence small](Coherence3.png)
 
