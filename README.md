@@ -1,5 +1,5 @@
-# DeepDenoise
-## A deep learning model to remove noise from multidimensional data
+# DeepDenoise: remove noise from multidimensional data
+## Motivation
 
 In the era of data-driven decision-making, the significance of multidimensional data analysis extends to various sectors and industries. Nevertheless, real data is typically corrupted with noise, which poses challenges in achieving precise interpretations and making informed decisions.
 
@@ -22,6 +22,9 @@ The synthetic approach used to generate training instances allowed extensive mod
 The extensive CNN training lead to a high denoising performance. While dramaticaly decreasing the noise level, the trained CNNs preserve sharp high-frequency components of the signal much better than commonly used smoothing approaches. A thorough analysis of CNN denoising performance is presented in the [Test_models](notebooks/Test_models.ipynb) notebook.
 
 For detailed information about the CNN models please check the [model card](model_card.md) 
+
+## Datasets
+Data used for training and testing CNN performance is saved in the folder [data](data) of this repository. Please check the [data sheet](data_sheet.md) file for detailed information about the datasets.
 
 ## How to use the trained models
 The multiple model checkpoints saved during training are located in the "models" folder. They can be loaded into python environment and used for training or inference, as exemplified in the [training](notebooks/Training_CNNs.ipynb) notebook.
