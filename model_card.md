@@ -18,7 +18,7 @@ For a detailed assessment of model performance please check the notebook [Test_m
 
 Remarkably, the qualitative differences between the CNN networks and gaussian smoothing still hold in a noisier test set, as assessed by the coherence of extracted neuromodulator dynamics with ground truth (figure below).
 
-![Coherence small](Coherence2.png)
+![Coherence small](Coherence3.png)
 
 ## Limitations
 It is not clear how the CNN models generalize to other data types. The main concern on that matter are the domain-specific assumptions used to generate synthetic training instances.
