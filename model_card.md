@@ -14,11 +14,11 @@ Briefly, the model consists in a deep convolutional neural network (20 layers) w
 ## Performance
 For a detailed assessment of model performance please check the notebook [Test_models](notebooks/Test_models.ipynb). Briefly, the two CNN models trained with different noise levels outperformed a gaussian smoothing algorithm. Notably, the CNN trained with less noised achieved the best overall performance, owing the less distortion of authentic neuromodulator dynamics extracted from fluorescence data. The better preservation of sharp features in the target data is clearly visible in a validation set with the noise level used for training (figure below).
 
-[Validation instance](Validation_instance.png)
+![Validation instance](Validation_instance.png)
 
 Remarkably, the qualitative differences between the CNN networks and gaussian smoothing still hold in a noisier test set, as assessed by the coherence of extracted neuromodulator dynamics with ground truth (figure below).
 
-[Coherence](Coherence.png)
+![Coherence](Coherence.png)
 
 ## Limitations
 It is not clear how the CNN models generalize to other data types. The main concern on that matter are the domain-specific assumptions used to generate synthetic training instances.

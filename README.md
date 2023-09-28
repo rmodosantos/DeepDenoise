@@ -21,7 +21,7 @@ The synthetic approach used to generate training instances allowed extensive mod
 
 The extensive CNN training lead to a high denoising performance. While dramaticaly decreasing the noise level, the trained CNNs preserve sharp high-frequency components of the signal much better than commonly used smoothing approaches. A thorough analysis of CNN denoising performance is presented in the [Test_models](notebooks/Test_models.ipynb) notebook.
 
-For detailed information about the CNN models please check the [model card](notebooks) 
+For detailed information about the CNN models please check the [model card](model_card.md) 
 
 ## How to use the trained models
 The multiple model checkpoints saved during training are located in the "models" folder. They can be loaded into python environment and used for training or inference, as exemplified in the [training](notebooks/Training_CNNs.ipynb) notebook.
