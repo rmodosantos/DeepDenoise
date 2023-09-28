@@ -13,7 +13,7 @@ I illustrate the approach on fluorescence measurements of brain activity, though
 
 In image denoising applications, instances used to train ML models typically consist on real images with negligible noise with added synthetic noise. The model is then trained to recover either the clean target image or the noise residual. There are however many cases where there is: a) no access to clean ground truth data (which can assume the form of images) or b) the noise is complex and hard to model accurately, rendering the above approach unfeasible. To overcome these limitations, I use a training data generation method relying on the direct recording of noise in the absence of signal and on the synthesis of the ground truth signal. Note that this approach requires domain knowledge about the signal dynamics.
 
-![Training set generation](Data_generation.png)
+![Training set generation small](Data_generation.png)
 
 ## Main outcomes
 
