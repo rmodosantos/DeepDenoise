@@ -1,7 +1,7 @@
-# DeepDenoise: remove noise from multidimensional data
+# DeepDenoise: a Pipeline for Faithful Noise Removal from Multivariate Data
 ## Motivation
 
-In the era of data-driven decision-making, the significance of multidimensional data analysis extends to various sectors and industries. Nevertheless, real data is typically corrupted with noise, which poses challenges in achieving precise interpretations and making informed decisions.
+In the era of data-driven decision-making, the significance of multivariate data analysis extends to various sectors and industries. Nevertheless, real data is typically corrupted with noise, which poses challenges in achieving precise interpretations and making informed decisions.
 
 Conventional noise reduction techniques often distort the signal of interest due to overlap with noise across one or more dimensions (e. g. time or space). To address this issues, in this project I investigate the implementation of a convolutional neural network (CNN) model using a generative approach to obtain large amounts of training data. This strategy allows extensive training without overfitting, leading to high denoising performance.
 
